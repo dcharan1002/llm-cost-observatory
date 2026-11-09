@@ -1,0 +1,7 @@
+# Services are added phase by phase:
+#   Phase 2 → redpanda, redpanda-console, generator, consumer
+#   Phase 5 → dagster
+#   Phase 6 → backend
+#   Phase 7 → frontend
+
+services: {}

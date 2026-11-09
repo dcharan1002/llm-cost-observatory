@@ -1,0 +1,45 @@
+# ---------- Secrets ----------
+.env
+*.env
+!.env.example
+
+# ---------- Python ----------
+__pycache__/
+*.py[cod]
+.venv/
+venv/
+*.egg-info/
+.pytest_cache/
+.ruff_cache/
+.mypy_cache/
+.coverage
+htmlcov/
+
+# ---------- Data (generated locally, never committed) ----------
+data/
+*.duckdb
+*.duckdb.wal
+*.parquet
+
+# ---------- dbt ----------
+dbt_project/target/
+dbt_project/dbt_packages/
+dbt_project/logs/
+
+# ---------- Dagster ----------
+orchestration/.dagster_home/
+orchestration/tmp*/
+
+# ---------- Node / Next.js ----------
+node_modules/
+frontend/.next/
+frontend/out/
+.vercel/
+
+# ---------- OS / editors ----------
+.DS_Store
+Thumbs.db
+.idea/
+.vscode/*
+!.vscode/extensions.json
+*.log
