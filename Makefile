@@ -1,4 +1,4 @@
-.PHONY: help setup up down logs clean test lint generate stream
+.PHONY: help setup up down logs clean test lint generate stream load consume produce stats ping
 
 PYTHON := python3
 VENV   := .venv
@@ -29,6 +29,21 @@ generate:        ## Backfill 7 days of synthetic events into data/raw/
 
 stream:          ## Stream live events to the terminal (Ctrl+C to stop)
 	$(VENV)/bin/python -m generator live --rate 5
+
+load:            ## Bulk-load the backfill file into DuckDB
+	$(VENV)/bin/python -m ingestion load data/raw/events.jsonl
+
+produce:         ## Stream live events to Kafka
+	$(VENV)/bin/python -m generator live --sink kafka
+
+consume:         ## Consume Kafka into DuckDB
+	$(VENV)/bin/python -m ingestion consume
+
+ping:            ## Test the Kafka connection
+	$(VENV)/bin/python -m ingestion ping
+
+stats:           ## Summarize the warehouse
+	$(VENV)/bin/python -m ingestion stats
 
 test:            ## Run Python tests
 	$(VENV)/bin/pytest -q

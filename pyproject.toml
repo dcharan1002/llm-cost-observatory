@@ -5,8 +5,9 @@ description = "Real-time FinOps for LLM APIs"
 requires-python = ">=3.11"
 
 [tool.pytest.ini_options]
-testpaths = ["generator/tests"]
+testpaths = ["generator/tests", "ingestion/tests"]
 pythonpath = ["."]
+markers = ["kafka: needs a real Kafka broker (KAFKA_INTEGRATION=1)"]
 
 [tool.ruff]
 line-length = 120

@@ -7,20 +7,25 @@ Backfill 7 days of history (plus ground-truth anomalies file):
 
 Stream live events to the terminal for 30 seconds:
     python -m generator live --rate 5 --duration 30
+
+Stream live events to Kafka (settings from .env):
+    python -m generator live --sink kafka
 """
 
 from __future__ import annotations
 
 import argparse
 import sys
+import time
 from collections import Counter
 from datetime import UTC, datetime, timedelta
 from pathlib import Path
 
 import numpy as np
 
+from common.settings import get_settings
 from generator.anomalies import random_schedule, save_ground_truth
-from generator.sinks import JsonlSink
+from generator.sinks import JsonlSink, make_sink
 from generator.stream import backfill, live
 
 
@@ -74,12 +79,19 @@ def cmd_live(args: argparse.Namespace) -> None:
     def announce(a):
         _log(f"🚨 anomaly started: {a.type} on {a.team}/{a.feature} until {a.end:%H:%M:%S} UTC")
 
-    sink, stats = JsonlSink(args.out), Stats()
-    _log(f"▶ streaming ~{args.rate} events/sec (Ctrl+C to stop)")
+    settings = get_settings()
+    kind = args.sink or settings.sink
+    sink, stats = make_sink(kind, settings, args.out), Stats()
+    show_progress = not (kind == "jsonl" and args.out == "-")
+    last_report = time.monotonic()
+    _log(f"▶ streaming ~{args.rate} events/sec to {kind} (Ctrl+C to stop)")
     try:
         for e in live(args.rate, args.anomaly_chance, args.seed, args.seasonality, args.duration, announce):
             sink.write(e)
             stats.add(e)
+            if show_progress and time.monotonic() - last_report >= 10:
+                last_report = time.monotonic()
+                _log(f"   … {stats.count:,} events sent · ${stats.cost:,.2f}")
     except KeyboardInterrupt:
         pass
     finally:
@@ -101,11 +113,13 @@ def build_parser() -> argparse.ArgumentParser:
     b.set_defaults(func=cmd_backfill)
 
     lv = sub.add_parser("live", help="stream events in real time")
-    lv.add_argument("--rate", type=float, default=20, help="events/sec (default 20)")
+    lv.add_argument("--rate", type=float, default=5, help="events/sec (default 5)")
     lv.add_argument("--anomaly-chance", type=float, default=0.03,
                     help="chance per minute an anomaly starts (default 0.03)")
     lv.add_argument("--duration", type=float, default=None, help="stop after N seconds")
-    lv.add_argument("--out", default="-", help="output file, or - for stdout (default)")
+    lv.add_argument("--sink", choices=["jsonl", "kafka", "landing"], default=None,
+                    help="where to send events (default: SINK in .env, else jsonl)")
+    lv.add_argument("--out", default="-", help="jsonl sink: output file, or - for stdout (default)")
     lv.add_argument("--seed", type=int, default=None)
     lv.add_argument("--seasonality", action="store_true", help="apply time-of-day traffic pattern")
     lv.set_defaults(func=cmd_live)

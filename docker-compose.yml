@@ -1,5 +1,5 @@
 # Services are added phase by phase:
-#   Phase 2 → redpanda, redpanda-console, generator, consumer
+#   Phase 2 → Kafka runs on Aiven (see docs/KAFKA_SETUP.md); CI uses Redpanda
 #   Phase 5 → dagster
 #   Phase 6 → backend
 #   Phase 7 → frontend

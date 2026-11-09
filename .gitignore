@@ -2,6 +2,11 @@
 .env
 *.env
 !.env.example
+certs/
+*.pem
+*.key
+*.cert
+*.crt
 
 # ---------- Python ----------
 __pycache__/

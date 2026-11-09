@@ -4,6 +4,10 @@
 # Phase 1 — generator
 numpy>=1.26
 
+# Phase 2 — streaming + warehouse
+confluent-kafka>=2.5
+duckdb>=1.1
+
 # Dev tools
 pytest>=8.0
 ruff>=0.6
