@@ -30,7 +30,7 @@ git init
 git add .
 git commit -m "chore: project scaffold (phase 0)"
 git branch -M main
-git remote add origin https://github.com/<your-username>/llm-cost-observatory.git
+git remote add origin https://github.com/dcharan1002/llm-cost-observatory.git
 git push -u origin main
 ```
 
@@ -45,7 +45,7 @@ This creates `.venv/`, installs dev tools, copies `.env.example` → `.env`, and
 
 ## 5. Personalize
 
-- [ ] Replace `<your-username>` in `README.md`
+- [ ] Replace `dcharan1002` in `README.md`
 - [ ] Replace `[Your Name]` in `LICENSE`
 - [ ] Add a repo description and topics on GitHub: `data-engineering`, `llm`, `finops`, `kafka`, `dbt`, `duckdb`, `dagster`, `fastapi`, `nextjs`
 

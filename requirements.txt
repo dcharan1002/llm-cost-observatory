@@ -1,6 +1,9 @@
 # Shared development dependencies.
 # Each phase adds its own packages here as we build it.
 
+# Phase 1 — generator
+numpy>=1.26
+
 # Dev tools
 pytest>=8.0
 ruff>=0.6

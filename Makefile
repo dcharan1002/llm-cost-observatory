@@ -1,4 +1,4 @@
-.PHONY: help setup up down logs clean test lint
+.PHONY: help setup up down logs clean test lint generate stream
 
 PYTHON := python3
 VENV   := .venv
@@ -23,6 +23,12 @@ down:            ## Stop all services
 
 logs:            ## Follow service logs
 	docker compose logs -f
+
+generate:        ## Backfill 7 days of synthetic events into data/raw/
+	$(VENV)/bin/python -m generator backfill --days 7
+
+stream:          ## Stream live events to the terminal (Ctrl+C to stop)
+	$(VENV)/bin/python -m generator live --rate 5
 
 test:            ## Run Python tests
 	$(VENV)/bin/pytest -q

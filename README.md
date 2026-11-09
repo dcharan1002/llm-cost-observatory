@@ -20,7 +20,7 @@ Companies are adopting LLM APIs and AI coding agents fast, and their bills are g
 
 ## ✨ Features (planned)
 
-- [ ] Synthetic LLM usage event generator with realistic patterns and injected anomalies
+- [x] Synthetic LLM usage event generator with realistic patterns and injected anomalies
 - [ ] Streaming ingestion with Redpanda (Kafka-compatible) into DuckDB
 - [ ] dbt transformations with data-quality tests
 - [ ] Anomaly detection (rolling z-score + rule-based runaway-agent detection)
@@ -79,11 +79,13 @@ llm-cost-observatory/
 > Full setup instructions: [docs/SETUP.md](docs/SETUP.md)
 
 ```bash
-git clone https://github.com/<your-username>/llm-cost-observatory.git
+git clone https://github.com/dcharan1002/llm-cost-observatory.git
 cd llm-cost-observatory
 cp .env.example .env
 make setup      # create Python virtual environment
-make up         # start all services (available from Phase 2)
+make generate   # create 7 days of synthetic usage data
+make stream     # watch live events (Ctrl+C to stop)
+make test       # run the test suite
 ```
 
 ## 🗺️ Roadmap
@@ -91,7 +93,7 @@ make up         # start all services (available from Phase 2)
 | Phase | Description | Status |
 |---|---|---|
 | 0 | Project setup | ✅ |
-| 1 | Synthetic data generator | ⏳ |
+| 1 | Synthetic data generator ([details](generator/README.md)) | ✅ |
 | 2 | Streaming pipeline | ⏳ |
 | 3 | dbt models + tests | ⏳ |
 | 4 | Anomaly detection | ⏳ |
