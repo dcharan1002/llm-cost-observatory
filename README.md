@@ -102,6 +102,4 @@ make up         # start all services (available from Phase 2)
 | 9 | Deployment | ⏳ |
 | 10 | Demo + write-up | ⏳ |
 
-## 📄 License
 
-MIT — see [LICENSE](LICENSE).
